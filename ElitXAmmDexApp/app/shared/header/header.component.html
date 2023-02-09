@@ -1,0 +1,34 @@
+<div class="header-image-wrapper">
+  <div class="bg"></div>
+  <div class="header-image-content" *ngIf="currentScreenSize != breakpoints[0]">
+    <h1
+      *ngIf="title"
+      class="title"
+      Animation
+      textAnimation="text_focus_in_expand"
+    >
+      {{ title }}
+    </h1>
+    <p *ngIf="desc1" class="desc">{{ desc1 }}</p>
+    <div>
+      <button mat-stroked-button class="but" routerLink="/liquidity">
+        Liquidity
+      </button>
+      <button mat-stroked-button class="but" routerLink="/trade">Trade</button>
+    </div>
+  </div>
+  <div
+    class="header-image-content-small"
+    *ngIf="currentScreenSize == breakpoints[0]"
+  >
+    <h1
+      *ngIf="title"
+      class="title-small"
+      Animation
+      textAnimation="text_focus_in_expand"
+    >
+      {{ title }}
+    </h1>
+    <p *ngIf="desc1" class="desc-small">{{ desc1 }}</p>
+  </div>
+</div>

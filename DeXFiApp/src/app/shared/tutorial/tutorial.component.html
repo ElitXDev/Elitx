@@ -1,0 +1,32 @@
+<!-- <app-video-player
+  fxLayoutAlign="center center"
+  [params]="params"
+></app-video-player> -->
+
+<div class="wrapper">
+  <div class="shadow" fxLayout="column" fxLayoutAlign="start center">
+    <h1>{{ headline }}</h1>
+    <div>
+      <mat-radio-group [(ngModel)]="videoIdx">
+        <mat-radio-button
+          *ngFor="let video of videos; let i = index"
+          [value]="i"
+          (change)="selectVideo()"
+        >
+          {{ video.title }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <button
+      class="circle"
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      mat-icon-button
+      matomoClickCategory="Video"
+      matomoClickAction="Play"
+      (click)="openVideoDialog()"
+    >
+      <mat-icon>play_circle_outline</mat-icon>
+    </button>
+  </div>
+</div>

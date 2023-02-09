@@ -1,0 +1,38 @@
+<mat-card>
+  <h2 fxLayoutAlign="center">Test Accounts</h2>
+  <div fxLayout="row wrap" fxLayoutAlign="space-around" fxLayoutGap="10px">
+    <div class="accs" *ngFor="let acc of accs" fxFlex>
+      <p>
+        <button
+          mat-raised-button
+          color="accent"
+          (click)="openExplorer(acc.address)"
+          matTooltip="Open in Explorer: {{ acc.address }}"
+          matomoClickCategory="Explorer"
+          matomoClickAction="{{ acc.address }}"
+        >
+          {{ acc.name }}
+        </button>
+      </p>
+      <div>
+        <p>{{ currencies[0].name }}: {{ acc.balances[0] | number: "1.2-2" }}</p>
+        <ng-container *ngFor="let nft of acc.nfts; let i = index">
+          <p matTooltip="{{ nft | json }}" (click)="openUri(nft.URI!)">
+            NFT {{ i + 1 }}:
+            {{ nft.NFTokenID ? "..." + (nft.NFTokenID | slice: -10) : "" }}
+          </p>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <p></p>
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="openStream()"
+    matomoClickCategory="Explorer"
+    matomoClickAction="Stream"
+  >
+    Open Debug Stream
+  </button>
+</mat-card>

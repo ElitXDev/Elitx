@@ -1,0 +1,15 @@
+<div class="mission">
+  <mat-grid-list
+    [cols]="cols"
+    rowHeight="350"
+    (window:resize)="onResize($event)"
+  >
+    <mat-grid-tile *ngFor="let img of imgs; let indexOfelement = index">
+      <div class="mission-detail">
+        <img [src]="img" />
+        <h1>{{ headlines[indexOfelement] }}</h1>
+        <p>{{ texts[indexOfelement] }}</p>
+      </div>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

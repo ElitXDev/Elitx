@@ -1,0 +1,112 @@
+<!-- <app-funds-disclaimer></app-funds-disclaimer> -->
+
+<ng-container *ngIf="loading">
+  <div class="spinner">
+    <app-spinner
+      text="DeXentralized Finance - DeFi on the XRPL"
+      [showText]="true"
+      [animate]="true"
+    ></app-spinner>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!loading">
+  <mat-toolbar class="back">
+    <button mat-button routerLink="">
+      <mat-icon>home</mat-icon>
+    </button>
+    <span class="toolbar-spacer"></span>
+    <div *ngIf="currentScreenSize > breakpoints[0]">
+      <button
+        mat-button
+        *ngFor="let item of menuItems"
+        routerLink="{{ item.route }}"
+      >
+        <mat-icon>{{ item.icon }}</mat-icon>
+        {{ item.label }}
+      </button>
+      <button
+        *ngIf="!signedIn"
+        mat-button
+        matomoClickCategory="Xumm"
+        matomoClickAction="LogIn"
+        (click)="xummLogIn()"
+      >
+        <mat-icon>{{ xummIcon }}</mat-icon>
+        LogIn
+      </button>
+      <button
+        *ngIf="signedIn"
+        mat-button
+        matomoClickCategory="Account"
+        matomoClickAction="Overview"
+        (click)="openAccountDialog()"
+      >
+        <mat-icon>{{ xummIcon }}</mat-icon>
+        Account
+      </button>
+      <button
+        mat-button
+        [matTooltip]="tooltipMode"
+        matomoClickCategory="Theme"
+        matomoClickAction="{{ theme.name }}"
+        (click)="toggleTheme()"
+      >
+        <mat-icon>{{ theme.icon }}</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="currentScreenSize == breakpoints[0]">
+      <button mat-icon-button [matMenuTriggerFor]="dropMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #dropMenu="matMenu">
+        <ng-container *ngFor="let item of menuItems">
+          <button mat-menu-item routerLink="{{ item.route }}">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            {{ item.label }}
+          </button>
+          <mat-divider></mat-divider>
+        </ng-container>
+        <button
+          *ngIf="!signedIn"
+          mat-menu-item
+          matomoClickCategory="Xumm"
+          matomoClickAction="LogIn"
+          (click)="xummLogIn()"
+        >
+          <mat-icon>{{ xummIcon }}</mat-icon>
+          LogIn
+        </button>
+        <mat-divider></mat-divider>
+        <button
+          *ngIf="signedIn"
+          mat-menu-item
+          matomoClickCategory="Account"
+          matomoClickAction="Overview"
+          (click)="openAccountDialog()"
+        >
+          <mat-icon>{{ xummIcon }}</mat-icon>
+          Account
+        </button>
+        <mat-divider></mat-divider>
+        <button
+          mat-menu-item
+          [matTooltip]="tooltipMode"
+          matomoClickCategory="Theme"
+          matomoClickAction="{{ theme.name }}"
+          (click)="toggleTheme()"
+        >
+          <mat-icon>{{ theme.icon }}</mat-icon>
+        </button>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+  <router-outlet></router-outlet>
+</ng-container>
+
+<div *ngIf="showBackToTop" class="back-to-top" (click)="scrollToTop()">
+  <mat-icon class="back-icon">{{ backToTopIcon }}</mat-icon>
+</div>
+
+<app-footer></app-footer>

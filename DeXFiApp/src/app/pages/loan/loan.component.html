@@ -1,0 +1,33 @@
+<app-header-img-small [title]="title" [desc]="desc"></app-header-img-small>
+
+<div class="wrapper">
+  <mat-card
+    class="fetch"
+    *ngIf="!ready || !connected"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <h2>Fetching Test Accounts...</h2>
+    <app-spinner></app-spinner>
+    <p>&nbsp;</p>
+    <button
+      mat-raised-button
+      color="primary"
+      matomoClickCategory="Error"
+      matomoClickAction="Retry"
+      matTooltip="Try again"
+      matTooltipPosition="after"
+      (click)="retry()"
+    >
+      Reload Accounts
+    </button>
+  </mat-card>
+
+  <ng-container *ngIf="ready && connected">
+    <app-loan-accounts></app-loan-accounts>
+    <h1>Choose YOUR loan</h1>
+    <app-take-loan></app-take-loan>
+    <h1>Create YOUR loan</h1>
+    <app-make-loan></app-make-loan>
+  </ng-container>
+</div>

@@ -1,0 +1,104 @@
+<div class="wrapper">
+  <mat-card appElevation *ngIf="pool">
+    <mat-card-content>
+      <app-pool-composition [poolData]="poolData"></app-pool-composition>
+    </mat-card-content>
+  </mat-card>
+  <mat-card appElevation>
+    <mat-card-content>
+      <p><u>Withdraw Liquidity:</u></p>
+      <p>&nbsp;</p>
+      <div>
+        <label for="r">Withdraw:</label>
+        <mat-radio-group [(ngModel)]="mode" #r (change)="getForm()">
+          <mat-radio-button
+            [matTooltip]="mode[1]"
+            matTooltipPosition="above"
+            *ngFor="let mode of modes; index as j"
+            [value]="j"
+          >
+            {{ mode[0] }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div>
+        <label for="d">Specify in:</label>
+        <mat-radio-group [(ngModel)]="txType" #d>
+          <ng-container *ngFor="let v of txTypes; index as k">
+            <mat-radio-button
+              [matTooltip]="v[1]"
+              (change)="getForm()"
+              matTooltipPosition="below"
+              *ngIf="!mode ? k < 3 : k > 2"
+              [value]="k"
+            >
+              {{ v[0] }}
+            </mat-radio-button>
+          </ng-container>
+        </mat-radio-group>
+      </div>
+      <ng-container *ngTemplateOutlet="Form; context: { pool }"> </ng-container>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appElevation>
+    <mat-card-content>
+      <p><u>Pay:</u></p>
+      <p>{{ payAmount || 0 | number : "1.2-4" }} LP-Token</p>
+      <p>&nbsp;</p>
+      <p><u>Receive:</u></p>
+      <p>{{ receiveAmount || 0 | number : "1.2-4" }} {{ poolData.Asset }}</p>
+      <p>{{ receiveAmount2 || 0 | number : "1.2-4" }} {{ poolData.Asset2 }}</p>
+      <p>&nbsp;</p>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="parseTx()"
+        [disabled]="form.invalid"
+      >
+        Let's do this!
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- <pre>{{ tx | json }} </pre> -->
+<!-- <p>{{ form.valid }}</p> -->
+<!-- <pre>{{ poolData | json }} </pre> -->
+
+<ng-template #Form let-pool="pool">
+  <form [formGroup]="form">
+    <mat-form-field
+      appearance="fill"
+      *ngIf="form.get('Amount')?.enabled"
+      subscriptSizing="dynamic"
+    >
+      <input matInput type="number" formControlName="Amount" />
+      <mat-label>Amount</mat-label>
+      <span matTextSuffix>{{ poolData.Asset }}</span>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="fill"
+      *ngIf="form.get('EPrice')?.enabled"
+      subscriptSizing="dynamic"
+    >
+      <input matInput type="number" formControlName="EPrice" />
+      <mat-label>Limit Price</mat-label>
+      <span matTextSuffix>LP/{{ poolData.Asset }}</span>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="fill"
+      *ngIf="form.get('LPTokenOut')?.enabled"
+      subscriptSizing="dynamic"
+    >
+      <input matInput type="number" formControlName="LPTokenOut" />
+      <mat-label>LP Token</mat-label>
+      <span matTextSuffix>LP</span>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+  </form>
+</ng-template>

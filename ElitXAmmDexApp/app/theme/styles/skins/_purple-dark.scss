@@ -1,0 +1,55 @@
+$purple-dark-primary: mat.define-palette(mat.$purple-palette, 700, 50, 900);
+$purple-dark-accent: mat.define-palette(mat.$green-palette, 600, 100, 900);
+$purple-dark-warn: mat.define-palette(mat.$red-palette, A200);
+
+$purple-dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $purple-dark-primary,
+      accent: $purple-dark-accent,
+      warn: $purple-dark-warn,
+    ),
+  )
+);
+
+// Get color param from our theme
+$palette-color: map-get($purple-dark-theme, color);
+// Get background param from color param
+$background: map-get($palette-color, background);
+// $background also has background param contains color, set it to ...
+$background: map-merge(
+  $background,
+  (
+    status-bar: black,
+    // app-bar: map.get($grey-palette, 900),
+    background: #121212,
+    hover: rgba(white, 0.04),
+    card: #181818,
+    //map.get($grey-palette, 800),
+    dialog: #181818,
+    //map.get($grey-palette, 800),
+    disabled-button: rgba(white, 0.12),
+    // raised-button: map.get($grey-palette, 800),
+    // focused-button: $light-focused,
+    // selected-button: map.get($grey-palette, 900),
+    // selected-disabled-button: map.get($grey-palette, 800),
+    disabled-button-toggle: black,
+    // unselected-chip: map.get($grey-palette, 700),
+    disabled-list-option: rgba(white, 0.12),
+    // tooltip: map.get($grey-palette, 700),
+  )
+);
+// Set background param for palette
+$palette-color: map-merge(
+  $palette-color,
+  (
+    background: $background,
+  )
+);
+// Set palette for theme
+$purple-dark-theme: map-merge(
+  $purple-dark-theme,
+  (
+    color: $palette-color,
+  )
+);

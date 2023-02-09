@@ -1,0 +1,57 @@
+.wrapper {
+  display: block;
+  overflow: auto;
+}
+
+.cont {
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid lightslategray;
+  border-radius: 3px;
+}
+
+button {
+  margin: 10px;
+}
+
+h2 {
+  margin-top: 10px;
+}
+
+.mat-radio-button {
+  padding-left: 10px;
+  padding-bottom: 10px;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+tr.detail-row:not(hover) {
+  height: 0;
+}
+
+tr.element-row:not(.example-expanded-row):hover {
+  background: rgb(211, 211, 211, 0.5);
+  cursor: pointer;
+}
+
+.mat-cell,
+.mat-header-cell {
+  padding: 0 10px 0 10px !important;
+}
+
+.mat-column-id {
+  width: 40px;
+}
+
+.mat-column-collateralAmount,
+.mat-column-loanAmount {
+  text-align: right;
+  width: 1px;
+  white-space: nowrap;
+}
+
+.frame {
+  border: 1px solid lightslategray;
+}

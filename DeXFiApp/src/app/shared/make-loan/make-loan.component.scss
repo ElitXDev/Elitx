@@ -1,0 +1,21 @@
+.wrapper {
+  display: block;
+  overflow: auto;
+  text-align: center;
+}
+
+.mat-form-field {
+  min-width: 200px;
+  max-width: 400px;
+}
+
+button {
+  margin: 10px;
+}
+
+.cont {
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid lightslategray;
+  border-radius: 3px;
+}

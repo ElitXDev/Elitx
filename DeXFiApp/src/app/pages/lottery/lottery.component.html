@@ -1,0 +1,31 @@
+<app-header-img-small [title]="title" [desc]="desc"></app-header-img-small>
+
+<div class="wrapper">
+  <mat-card
+    class="fetch"
+    *ngIf="!ready || !connected"
+    fxLayout="column"
+    fxLayoutAlign="center center"
+  >
+    <h2>Fetching Test Accounts...</h2>
+    <app-spinner></app-spinner>
+    <p>&nbsp;</p>
+    <button
+      mat-raised-button
+      color="primary"
+      matomoClickCategory="Error"
+      matomoClickAction="Retry"
+      matTooltip="Try again"
+      matTooltipPosition="after"
+      (click)="retry()"
+    >
+      Reload Accounts
+    </button>
+  </mat-card>
+
+  <ng-container *ngIf="ready && connected">
+    <app-lottery-accounts></app-lottery-accounts>
+    <h1>Take Your Chance</h1>
+    <app-lottery-overview></app-lottery-overview>
+  </ng-container>
+</div>

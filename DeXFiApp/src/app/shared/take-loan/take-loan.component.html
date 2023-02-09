@@ -1,0 +1,393 @@
+<div class="wrapper">
+  <ng-template *ngTemplateOutlet="filterTmp"></ng-template>
+
+  <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
+    <ng-container matColumnDef="{{ offerCols[0] }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Collateral Amount
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.collateralAmount | number: "1.2-6" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="{{ offerCols[1] }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Collateral Currency
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.collateralCurrency }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="{{ offerCols[2] }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Loan Amount</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.loanAmount | number: "1.2-6" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="{{ offerCols[3] }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Loan Currency</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.loanCurrency }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="{{ offerCols[4] }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Loan term</th>
+      <td mat-cell *matCellDef="let row">{{ row.period }} days</td>
+    </ng-container>
+
+    <ng-container matColumnDef="{{ offerCols[5] }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        Interest rate in %
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.interestRate | number: "1.2-3" }}%
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="{{ offerCols[6] }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Interest</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.interest | number: "1.2-6" }}
+        {{ row.collateralCurrency }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="{{ offerCols[7] }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Expires on</th>
+      <td mat-cell *matCellDef="let row">
+        {{ (row.timestamp + 946681200) * 1000 | date }}
+      </td></ng-container
+    >
+
+    <!-- Expanded Content -->
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="offerCols.length">
+        <div
+          *ngIf="element === expandedElement"
+          class="element-detail"
+          Animation
+          [eleAnimation]="eleAnimation"
+        >
+          <div>
+            <h2>Loan Conditions:</h2>
+            <div *ngIf="element.state == 1 && role == 1">
+              <p>
+                Send
+                {{ element.collateralAmount | number: "1.1-6" }}
+                {{ element.collateralCurrency }} to the contract and you will
+                instantly receive
+                {{ element.loanAmount | number: "1.1-6" }}
+                {{ element.loanCurrency }}.
+              </p>
+              <p>
+                You must repay the loan within {{ element.period }} days to get
+                your
+                {{
+                  element.collateralAmount - element.interest | number: "1.1-6"
+                }}
+                {{ element.collateralCurrency }} back.
+              </p>
+              <p>
+                Otherwise, the other party will receive your entire collateral
+                ({{ element.collateralAmount | number: "1.1-6" }}
+                {{ element.collateralCurrency }}).
+              </p>
+            </div>
+            <div *ngIf="element.state == 1 && role == 2">
+              <p>
+                Send {{ element.loanAmount | number: "1.1-6" }}
+                {{ element.loanCurrency }} to the contract.
+              </p>
+              <p>
+                If the loan is paid back within {{ element.period }} days, you
+                will receive
+                {{ element.loanAmount | number: "1.1-6" }}
+                {{ element.loanCurrency }} plus
+                {{ element.interest | number: "1.1-6" }}
+                {{ element.collateralCurrency }} interest.
+              </p>
+              <p>
+                Otherwise, you will receive the entire collateral ({{
+                  element.collateralAmount | number: "1.1-6"
+                }}
+                {{ element.collateralCurrency }}).
+              </p>
+            </div>
+            <div *ngIf="element.state == 2">
+              <p>
+                If you are the borrower, send
+                {{ element.loanAmount | number: "1.1-6" }}
+                {{ element.loanCurrency }} to the contract to repay and close
+                the loan.
+              </p>
+              <p>
+                If the loan has already expired, anyone can close it by sending
+                1 Drop to the contract.
+              </p>
+            </div>
+          </div>
+          <div
+            fxLayoutAlign="space-around"
+            fxLayoutGap="10px"
+            fxLayout="row wrap"
+          >
+            <div fxLayout="column" fxLayoutAlign="top center" class="cont">
+              <p><u>Smart Contract address:</u></p>
+              <button
+                mat-raised-button
+                matTooltip="Copy to the clipboard"
+                matTooltipPosition="after"
+                color="accent"
+                matomoClickCategory="TakeLoan"
+                matomoClickAction="copy hookAddress"
+                [cdkCopyToClipboard]="hookAcc"
+                (click)="
+                  snackBarService.openSnackBar(
+                    addressSnackbarMessage,
+                    addressSnackbarAction,
+                    addressSnackbarDuration
+                  )
+                "
+              >
+                {{ hookAcc }}
+              </button>
+              <qr-code level="Q" [size]="150" [value]="hookAcc"></qr-code>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="top center" class="cont">
+              <div *ngIf="element.state == 1">
+                <label>Transaction Memo: </label>
+                <mat-radio-group [(ngModel)]="offerMemoPrefix">
+                  <mat-radio-button [value]="'3'" selected="true"
+                    >Accept Offers</mat-radio-button
+                  >
+                  <mat-radio-button [value]="'2'"
+                    >Cancel Offer</mat-radio-button
+                  >
+                </mat-radio-group>
+              </div>
+              <div *ngIf="element.state == 2">
+                <label>Transaction Memo: </label>
+                <mat-radio-group [(ngModel)]="loanMemoPrefix">
+                  <mat-radio-button [value]="'4'" selected="true"
+                    >Repay Loan</mat-radio-button
+                  >
+                  <mat-radio-button [value]="'5'">Close Loan</mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <button
+                mat-raised-button
+                matTooltip="Copy to the clipboard"
+                matTooltipPosition="after"
+                color="accent"
+                matomoClickCategory="TakeLoan"
+                matomoClickAction="copy memo"
+                [cdkCopyToClipboard]="
+                  (element.state == 1 ? offerMemoPrefix : loanMemoPrefix) +
+                  element.key
+                "
+                (click)="
+                  snackBarService.openSnackBar(
+                    addressSnackbarMessage,
+                    addressSnackbarAction,
+                    addressSnackbarDuration
+                  )
+                "
+              >
+                {{
+                  (element.state == 1 ? offerMemoPrefix : loanMemoPrefix) +
+                    element.key
+                }}
+              </button>
+              <p></p>
+              <qr-code
+                level="Q"
+                [size]="150"
+                [value]="
+                  (element.state == 1 ? offerMemoPrefix : loanMemoPrefix) +
+                  element.key
+                "
+              ></qr-code>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="top center" class="cont">
+              <p><u>One-click send:</u></p>
+              <mat-form-field appearance="fill">
+                <mat-label>Sender account:</mat-label>
+                <mat-select [(ngModel)]="acc">
+                  <mat-option
+                    *ngFor="let account of accs"
+                    [value]="account.id"
+                    >{{ account.name }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+              <div *ngIf="element.state == 1">
+                <button
+                  mat-raised-button
+                  color="accent"
+                  matomoClickCategory="TakeLoan"
+                  matomoClickAction="take offer"
+                  (click)="acceptOffer(element)"
+                  [disabled]="
+                    isLoading || accs[acc]!.address == element.makerAccId
+                  "
+                >
+                  Accept Offer
+                </button>
+                <button
+                  mat-raised-button
+                  color="accent"
+                  matomoClickCategory="TakeLoan"
+                  matomoClickAction="cancel offer"
+                  (click)="cancelOffer(element)"
+                  [disabled]="
+                    isLoading ||
+                    (accs[acc]!.address != element.makerAccId &&
+                      !element.isExpired)
+                  "
+                >
+                  Cancel Offer
+                </button>
+              </div>
+              <div *ngIf="element.state == 2">
+                <button
+                  mat-raised-button
+                  color="accent"
+                  matomoClickCategory="TakeLoan"
+                  matomoClickAction="repay loan"
+                  (click)="repayLoan(element)"
+                  [disabled]="
+                    isLoading ||
+                    accs[acc].address !=
+                      (element.role == 1
+                        ? element.makerAccId
+                        : element.takerAccId)
+                  "
+                >
+                  Repay Loan
+                </button>
+                <button
+                  mat-raised-button
+                  color="accent"
+                  matomoClickCategory="TakeLoan"
+                  matomoClickAction="close loan"
+                  (click)="closeLoan(element)"
+                  [disabled]="isLoading || !element.isExpired"
+                >
+                  Close loan
+                </button>
+              </div>
+              <mat-progress-bar
+                [mode]="isLoading ? 'indeterminate' : 'determinate'"
+              ></mat-progress-bar>
+            </div>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="offerCols"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: offerCols"
+      class="element-row"
+      [class.example-expanded-row]="expandedElement === row"
+      (click)="expand(row)"
+    >
+      >
+    </tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['expandedDetail']"
+      class="detail-row"
+    ></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">
+        {{
+          filterValue
+            ? "No data matching the filter " + filterValue
+            : "Looks empty here... Why not create a loan yourself?"
+        }}
+      </td>
+    </tr>
+  </table>
+  <mat-paginator
+    [pageSizeOptions]="[10, 25, 100]"
+    aria-label="Select page of loans"
+  ></mat-paginator>
+</div>
+
+<ng-template #filterTmp>
+  <mat-form-field class="left-align" appearance="standard">
+    <mat-label>Filter</mat-label>
+    <input
+      matInput
+      #input
+      [(ngModel)]="filterValue"
+      (keyup)="applyFilter($event)"
+      placeholder="Ex- XRP"
+    />
+  </mat-form-field>
+
+  <div
+    fxLayoutAlign="space-around center"
+    fxLayoutGap="20px"
+    fxLayout="row wrap"
+  >
+    <div>
+      <label>I want to be the: </label>
+      <mat-radio-group [(ngModel)]="role">
+        <mat-radio-button
+          *ngFor="let role of roles"
+          [value]="role.id"
+          (change)="updateTable()"
+        >
+          {{ role.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <!-- <p></p> -->
+    <div>
+      <label>Show: </label>
+      <mat-radio-group [(ngModel)]="showCurrentLoans">
+        <mat-radio-button [value]="false" (change)="updateTable()"
+          >Available Offers</mat-radio-button
+        >
+        <mat-radio-button [value]="true" (change)="updateTable()"
+          >Current Loans</mat-radio-button
+        >
+      </mat-radio-group>
+    </div>
+    <button
+      mat-icon-button
+      color="accent"
+      matomoClickCategory="TakeLoan"
+      matomoClickAction="refresh offer"
+      aria-label="Refresh Offers"
+      matTooltip="Refresh Offers"
+      (click)="getOffers()"
+    >
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+</ng-template>
+
+<!-- <mat-form-field appearance="fill">
+  <input matInput [(ngModel)]="key" />
+  <mat-label>Resend Key</mat-label>
+</mat-form-field>
+<button
+  color="accent"
+  matomoClickCategory="TakeLoan"
+  matomoClickAction="resend offer"
+  aria-label="Resend Offers"
+  matTooltip="Resend Offers"
+  (click)="resend()"
+>
+  Resend
+</button> -->

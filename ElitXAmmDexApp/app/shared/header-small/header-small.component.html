@@ -1,0 +1,14 @@
+<div class="header-image-wrapper">
+  <div class="bg"></div>
+  <div class="header-image-content">
+    <h1
+      *ngIf="title"
+      class="title"
+      Animation
+      textAnimation="text_focus_in_expand"
+    >
+      {{ title }}
+    </h1>
+    <p *ngIf="desc" class="desc">{{ desc }}</p>
+  </div>
+</div>

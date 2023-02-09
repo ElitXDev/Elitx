@@ -1,0 +1,18 @@
+<p><u>Current pool composition:</u></p>
+<p>&nbsp;</p>
+<p>
+  <u>Asset 1:</u>
+  {{ poolData.Amount | number : "1.2-2" }}
+  {{ poolData.Asset }}
+</p>
+<p>
+  <u>Asset 2:</u>
+  {{ poolData.Amount2 | number : "1.2-2" }}
+  {{ poolData.Asset2 }}
+</p>
+<p>
+  <u>Issued LP-Token:</u>
+
+  {{ poolData.LPToken | number : "1.2-2" }} LP
+</p>
+<p><u>Trading Fee:</u> {{ poolData.TradingFee | number : "1.2-2" }}%</p>

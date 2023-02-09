@@ -1,0 +1,370 @@
+<mat-card class="mat-elevation-z8 wrapper">
+  <h3>It's all up to you - just create the loan you want!</h3>
+  <mat-stepper #stepper #linear>
+    <mat-step [stepControl]="form">
+      <ng-template matStepLabel>Choose</ng-template>
+      <ng-template *ngTemplateOutlet="formTmp"></ng-template>
+      <p></p>
+      <button
+        color="accent"
+        [disabled]="form.invalid"
+        mat-raised-button
+        matomoClickCategory="MakeLoan"
+        matomoClickAction="updateValues"
+        matStepperNext
+        (click)="updateValues()"
+      >
+        Next
+      </button>
+    </mat-step>
+    <mat-step [completed]="termsAgreement">
+      <ng-template matStepLabel>Confirm</ng-template>
+      <ng-template *ngTemplateOutlet="checkTextTmp"></ng-template>
+      <section>
+        <h2>
+          <mat-checkbox
+            [(ngModel)]="termsAgreement"
+            [ngModelOptions]="{ standalone: true }"
+            matTooltipPosition="after"
+            >Yes, this is exactly what I want!</mat-checkbox
+          >
+        </h2>
+      </section>
+      <button
+        color="accent"
+        mat-raised-button
+        matStepperPrevious
+        matomoClickCategory="MakeLoan"
+        matomoClickAction="back1"
+      >
+        Back
+      </button>
+      <button
+        color="accent"
+        [disabled]="!termsAgreement"
+        mat-raised-button
+        matomoClickCategory="MakeLoan"
+        matomoClickAction="next1"
+        matStepperNext
+      >
+        Next
+      </button>
+    </mat-step>
+    <mat-step [stepControl]="form">
+      <ng-template matStepLabel>Send</ng-template>
+      <ng-template *ngTemplateOutlet="txDetailsTmp"></ng-template>
+      <p></p>
+      <button
+        color="accent"
+        mat-raised-button
+        matStepperPrevious
+        matomoClickCategory="MakeLoan"
+        matomoClickAction="back2"
+      >
+        Back
+      </button>
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="reset(stepper)"
+        matomoClickCategory="MakeLoan"
+        matomoClickAction="next2"
+      >
+        Reset
+      </button>
+    </mat-step>
+  </mat-stepper>
+</mat-card>
+
+<ng-template #formTmp>
+  <form [formGroup]="form">
+    <p></p>
+    <div fxLayout="row wrap" fxLayoutAlign="center" fxLayoutGap="10px">
+      <div fxLayout="column" fxFlex>
+        <mat-form-field
+          appearance="fill"
+          matTooltip="Borrower pays interest. Lender earns interest."
+        >
+          <mat-label>I want to be the:</mat-label>
+          <mat-select formControlName="role">
+            <mat-option *ngFor="let role of roles" [value]="role.id">
+              {{ role.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="column" fxFlex>
+        <mat-form-field appearance="fill">
+          <mat-label>Loan Currency</mat-label>
+          <mat-select formControlName="loanCurrency">
+            <mat-option
+              *ngFor="let currency of currencies"
+              [value]="currency.id"
+            >
+              {{ currency.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            <ng-container
+              *ngTemplateOutlet="
+                errorTmp;
+                context: { fieldName: 'loanCurrency' }
+              "
+            ></ng-container
+          ></mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <input
+            matInput
+            type="number"
+            formControlName="loanAmount"
+            (keydown.enter)="goForward(stepper)"
+          />
+          <mat-label>Loan Amount</mat-label>
+          <!-- <span matSuffix>{{ currencies[loanCurrency].name }} </span> -->
+          <!-- <span matPrefix>Loan Amount:</span> -->
+          <mat-error>
+            <ng-container
+              *ngTemplateOutlet="errorTmp; context: { fieldName: 'loanAmount' }"
+            ></ng-container
+          ></mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="column" fxFlex>
+        <mat-form-field appearance="fill">
+          <mat-label>Collateral Currency</mat-label>
+          <mat-select formControlName="collateralCurrency">
+            <mat-option
+              *ngFor="let currency of currencies"
+              [value]="currency.id"
+              >{{ currency.name }}</mat-option
+            >
+          </mat-select>
+          <mat-error>
+            <ng-container
+              *ngTemplateOutlet="
+                errorTmp;
+                context: { fieldName: 'collateralCurrency' }
+              "
+            ></ng-container
+          ></mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <input
+            matInput
+            type="number"
+            formControlName="collateralAmount"
+            (keydown.enter)="goForward(stepper)"
+          />
+          <mat-label>Collateral Amount:</mat-label>
+          <mat-error>
+            <ng-container
+              *ngTemplateOutlet="
+                errorTmp;
+                context: { fieldName: 'collateralAmount' }
+              "
+            ></ng-container
+          ></mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="column" fxFlex>
+        <mat-form-field appearance="fill">
+          <input
+            matInput
+            matTooltip="Interest rate in %. Min 0.001. Max: 99. Rate * Period must not exceed 90%."
+            type="number"
+            formControlName="interestRate"
+            (keydown.enter)="goForward(stepper)"
+          />
+          <mat-label>Interest Rate in %:</mat-label>
+          <mat-error>
+            <ng-container
+              *ngTemplateOutlet="
+                errorTmp;
+                context: { fieldName: 'interestRate' }
+              "
+            ></ng-container
+          ></mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <input
+            matInput
+            type="number"
+            matTooltip="Loan period in days. Min: 1. Max: 99999. Rate * Period must not exceed 90%."
+            formControlName="loanPeriod"
+            (keydown.enter)="goForward(stepper)"
+          />
+          <mat-label>Loan Period in days:</mat-label>
+          <mat-error>
+            <ng-container
+              *ngTemplateOutlet="errorTmp; context: { fieldName: 'loanPeriod' }"
+            ></ng-container
+          ></mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #checkTextTmp>
+  <div>
+    <h1 class="warn-color" mat-dialog-title>
+      Make sure the following Information is correct
+    </h1>
+    <div *ngIf="role == 1">
+      <p>
+        Creating this offer will cost you
+        {{ collateralFee | number: "1.2-6" }}
+        {{ currencies[collateralCurrency].name }}
+        and will be charged once you send your money to the contract.
+      </p>
+      <p>
+        You offer {{ collateralAmount | number: "1.2-6" }}
+        {{ currencies[collateralCurrency].name }} as collateral.
+      </p>
+      <p>
+        You apply for a loan of {{ loanAmount | number: "1.2-6" }}
+        {{ currencies[loanCurrency].name }}.
+      </p>
+      <p>
+        If you repay the loan within {{ loanPeriod }} days, you will get back
+        {{ collateralAmount - collateralInterest | number: "1.2-6" }}
+        {{ currencies[collateralCurrency].name }}.
+      </p>
+    </div>
+    <div *ngIf="role == 2">
+      <p>
+        Creating this offer will cost you
+        {{ loanFee | number: "1.2-6" }}
+        {{ currencies[loanCurrency].name }}
+        and will be charged once you send your funds to the contract.
+      </p>
+      <p>
+        You offer a loan of {{ loanAmount | number: "1.2-6" }}
+        {{ currencies[loanCurrency].name }}.
+      </p>
+      <p>
+        You request {{ collateralAmount | number: "1.2-6" }}
+        {{ currencies[collateralCurrency].name }} as collateral.
+      </p>
+      <p>
+        If you the loan is repaid within {{ loanPeriod }} days, you will get
+        back
+        {{ loanAmount | number: "1.2-6" }}
+        {{ currencies[loanCurrency].name }} plus
+        {{ collateralInterest | number: "1.2-6" }}
+        {{ currencies[collateralCurrency].name }} interest.
+      </p>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #txDetailsTmp>
+  <h2 *ngIf="role == 1">
+    Send:
+    {{ collateralAmount + collateralFee }}
+    {{ currencies[collateralCurrency].name }}
+  </h2>
+  <h2 *ngIf="role == 2">
+    Send:
+    {{ loanAmount + loanFee }}
+    {{ currencies[loanCurrency].name }}
+  </h2>
+  <div fxLayout="row wrap" fxLayoutAlign="space-around" fxLayoutGap="10px">
+    <div fxLayout="column" fxLayoutAlign="top center" class="cont">
+      <p>Contract address:</p>
+      <button
+        mat-raised-button
+        matTooltip="Copy to the clipboard"
+        matTooltipPosition="after"
+        color="accent"
+        matomoClickCategory="MakeLoan"
+        matomoClickAction="copy hookAddress"
+        [cdkCopyToClipboard]="hookAddress"
+        (click)="
+          snackBarService.openSnackBar(
+            addressSnackbarMessage,
+            addressSnackbarAction,
+            addressSnackbarDuration
+          )
+        "
+      >
+        {{ hookAddress }}
+      </button>
+      <p></p>
+      <qr-code level="Q" [size]="150" [value]="hookAddress"></qr-code>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="top center" class="cont">
+      <p>Transaction Memo:</p>
+      <button
+        mat-raised-button
+        matTooltip="Copy to the clipboard"
+        matTooltipPosition="after"
+        color="accent"
+        matomoClickCategory="MakeLoan"
+        matomoClickAction="copy memo"
+        [cdkCopyToClipboard]="memo"
+        (click)="
+          snackBarService.openSnackBar(
+            addressSnackbarMessage,
+            addressSnackbarAction,
+            addressSnackbarDuration
+          )
+        "
+      >
+        {{ memo }}
+      </button>
+      <p></p>
+      <qr-code level="Q" [size]="150" [value]="memo"></qr-code>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="top center" class="cont">
+      <p>One-click send:</p>
+      <mat-form-field appearance="fill">
+        <mat-label>Sender account:</mat-label>
+        <mat-select [(ngModel)]="acc">
+          <mat-option *ngFor="let account of accs" [value]="account.id">{{
+            account.name
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <p></p>
+      <button
+        mat-raised-button
+        color="accent"
+        matomoClickCategory="MakeLoan"
+        matomoClickAction="create offer"
+        (click)="createOffer(stepper)"
+        [disabled]="form.invalid || loading"
+      >
+        Create Offer
+      </button>
+      <mat-progress-bar
+        [mode]="loading ? 'indeterminate' : 'determinate'"
+      ></mat-progress-bar>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #errorTmp let-name="fieldName">
+  <mat-error *ngIf="form.get(name)!.hasError('required')"> Required </mat-error>
+  <mat-error *ngIf="form.get(name)!.hasError('validDecimals')">
+    {{ form.get(name)!.errors!["validDecimals"] }}
+  </mat-error>
+  <mat-error *ngIf="form.get(name)!.hasError('validInterest')">
+    {{ form.get(name)!.errors!["validInterest"] }}
+  </mat-error>
+  <mat-error *ngIf="form.get(name)!.hasError('differentCurrencies')">
+    {{ form.get(name)!.errors!["differentCurrencies"] }}
+  </mat-error>
+  <mat-error *ngIf="form.get(name)!.hasError('min')">
+    Min Value: {{ form.get(name)!.errors!["min"]["min"] }}
+  </mat-error>
+  <mat-error *ngIf="form.get(name)!.hasError('max')">
+    Max Value: {{ form.get(name)!.errors!["max"]["max"] }}
+  </mat-error>
+</ng-template>

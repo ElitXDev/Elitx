@@ -1,0 +1,30 @@
+<mat-card>
+  <h2 fxLayoutAlign="center">Test Accounts</h2>
+  <div fxLayout="row wrap" fxLayoutAlign="space-around" fxLayoutGap="10px">
+    <div class="accs" *ngFor="let acc of accs" fxFlex>
+      <p>
+        <button
+          mat-raised-button
+          color="accent"
+          (click)="openExplorer(acc.address)"
+          matTooltip="Open in Explorer: {{ acc.address }}"
+          matomoClickCategory="Explorer"
+          matomoClickAction="{{ acc.address }}"
+        >
+          {{ acc.name }}
+        </button>
+      </p>
+      <p>{{ currencies[0].name }}: {{ acc.balances[0] | number: "1.2-2" }}</p>
+    </div>
+  </div>
+  <p></p>
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="openStream()"
+    matomoClickCategory="Explorer"
+    matomoClickAction="Stream"
+  >
+    Open Debug Stream
+  </button>
+</mat-card>

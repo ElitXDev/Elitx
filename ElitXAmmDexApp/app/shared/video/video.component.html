@@ -1,0 +1,23 @@
+<div class="wrapper">
+  <div class="shadow" appFlexbox direction="column" alignItems="center">
+    <h1>{{ headline }}</h1>
+    <mat-radio-group>
+      <mat-radio-button
+        class="white"
+        *ngFor="let video of videos; index as i"
+        [value]="i"
+        (change)="selectVideo(i)"
+      >
+        {{ video.title }}
+      </mat-radio-button>
+    </mat-radio-group>
+    <button
+      mat-icon-button
+      matomoClickCategory="Video"
+      matomoClickAction="Play"
+      (click)="openVideoDialog()"
+    >
+      <mat-icon>play_circle_outline</mat-icon>
+    </button>
+  </div>
+</div>

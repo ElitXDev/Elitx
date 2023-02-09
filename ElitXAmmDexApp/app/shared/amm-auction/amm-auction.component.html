@@ -1,0 +1,92 @@
+<div class="wrapper">
+  <mat-card appElevation *ngIf="pool">
+    <mat-card-content>
+      <app-pool-composition [poolData]="poolData"></app-pool-composition>
+    </mat-card-content>
+  </mat-card>
+  <mat-card appElevation>
+    <mat-card-content class="liquidity">
+      <p><u>Bid on an auction slot:</u></p>
+      <p>&nbsp;</p>
+      <p>
+        Minimum price to win auction:
+        {{ currentPriceToWin | number : "1.2-4" }} LP-Token
+      </p>
+      <p>Current owner: {{ pool.auction_slot!.account }}</p>
+      <label for="d">Specify:</label>
+      <mat-radio-group [(ngModel)]="mode" #d>
+        <ng-container *ngFor="let m of modes; index as k">
+          <mat-radio-button
+            [matTooltip]="m[1]"
+            (change)="getForm()"
+            matTooltipPosition="above"
+            [value]="k"
+          >
+            {{ m[0] }}
+          </mat-radio-button>
+        </ng-container>
+      </mat-radio-group>
+      <ng-container *ngTemplateOutlet="Form; context: { pool }"> </ng-container>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appElevation>
+    <mat-card-content>
+      <p>
+        <u>Pay {{ mode ? "up to" : "at least" }}:</u>
+      </p>
+      <p>{{ payAmount || 0 | number : "1.2-4" }} LP-Token</p>
+      <p>&nbsp;</p>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="parseTx()"
+        [disabled]="form.invalid"
+      >
+        Let's do this!
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<pre>{{ tx | json }} </pre>
+<!-- <pre>{{ poolData | json }} </pre> -->
+
+<ng-template #Form let-pool="pool">
+  <form [formGroup]="form">
+    <mat-form-field
+      appearance="fill"
+      *ngIf="form.get('Min')?.enabled"
+      subscriptSizing="dynamic"
+    >
+      <input matInput type="number" formControlName="Min" />
+      <mat-label>Minimum Amount</mat-label>
+      <span matTextSuffix>LP-Token</span>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="fill"
+      *ngIf="form.get('Max')?.enabled"
+      subscriptSizing="dynamic"
+    >
+      <input matInput type="number" formControlName="Max" />
+      <mat-label>Maximum Amount</mat-label>
+      <span matTextSuffix>LP-Token</span>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field
+      appearance="fill"
+      *ngIf="form.get('Accounts')?.enabled"
+      subscriptSizing="dynamic"
+      matTooltip="A list of up to 4 additional accounts separated by a comma that you allow to trade at the discounted fee. This cannot include the address of the transaction sender."
+    >
+      <input matInput formControlName="Accounts" />
+      <!-- <textarea matInput formControlName="Accounts"></textarea> -->
+      <mat-label>Accounts</mat-label>
+      <mat-hint>Example: r..., r..., r..., r...</mat-hint>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+  </form>
+</ng-template>

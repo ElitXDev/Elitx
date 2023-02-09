@@ -1,0 +1,11 @@
+<div class="wrapper" *ngIf="apiLoaded">
+  <mat-dialog-content>
+    <youtube-player
+      [videoId]="params.videoId"
+      [width]="params.width"
+      [height]="params.height"
+      [playerVars]="params.playerVars"
+      (stateChange)="stateChange($event)"
+    ></youtube-player>
+  </mat-dialog-content>
+</div>

@@ -1,0 +1,38 @@
+<div>
+  <div mat-dialog-content>
+    <p>Address:</p>
+    <p>{{ address }}</p>
+    <mat-divider></mat-divider>
+    <p>&nbsp;</p>
+    <p>Balances:</p>
+    <mat-divider></mat-divider>
+    <ng-container *ngFor="let b of balances">
+      <p>{{ b.value | number : "1.2-4" }} {{ b.currency }}</p>
+      <p>{{ b.issuer || "Native Asset" }}</p>
+      <mat-divider></mat-divider>
+    </ng-container>
+  </div>
+  <div mat-dialog-actions class="cent">
+    <button
+      mat-raised-button
+      color="primary"
+      matomoClickCategory="Xumm"
+      matomoClickAction="OpenExplorer: {{ address }}"
+      (click)="openExplorer()"
+    >
+      <mat-icon>open_in_new</mat-icon>
+      Details
+    </button>
+    <button
+      mat-dialog-close
+      mat-raised-button
+      color="primary"
+      matomoClickCategory="Xumm"
+      matomoClickAction="LogOut"
+      (click)="xummLogOut()"
+    >
+      <mat-icon>person_remove</mat-icon>
+      LogOut
+    </button>
+  </div>
+</div>

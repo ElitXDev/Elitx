@@ -1,0 +1,49 @@
+.mission {
+  // background-image: url(../../../assets/images/background/mission_bg.jpg);
+  text-align: center;
+  max-width: 100%;
+  padding: 50px 0 50px 0;
+  vertical-align: top;
+  .mission-detail {
+    vertical-align: top;
+    align-items: baseline;
+    min-width: 280px;
+    max-width: 280px;
+    H1 {
+      padding: 15px;
+      font-size: xx-large;
+    }
+    p {
+      font-size: large;
+    }
+  }
+}
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.bullet {
+  min-width: 280px;
+  max-width: 280px;
+  text-align: center;
+  padding: 50px 0 50px 0;
+  H1 {
+    padding: 15px;
+    // font-size: xx-large;
+  }
+  p {
+    font-size: large;
+  }
+}
+.wrap {
+  margin: 20px;
+  text-align: center;
+}
+H1 {
+  font-weight: 400;
+}
+p {
+  font-size: large;
+}

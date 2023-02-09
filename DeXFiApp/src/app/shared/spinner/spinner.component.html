@@ -1,0 +1,12 @@
+<div class="wrapper">
+  <mat-progress-spinner
+    class="logo"
+    [color]="color"
+    [mode]="spin ? 'indeterminate' : 'determinate'"
+    [value]="value"
+    [diameter]="diameter"
+    [strokeWidth]="strokeWidth"
+  ></mat-progress-spinner>
+</div>
+
+<p *ngIf="showText">{{ animate ? animatedText : text }}</p>

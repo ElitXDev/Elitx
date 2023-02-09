@@ -1,0 +1,113 @@
+<app-funds-disclaimer></app-funds-disclaimer>
+
+<ng-container *ngIf="loading">
+  <div class="spinner" fxLayout="row" fxLayoutAlign="center center">
+    <app-spinner
+      text="DeXentralized Finance - DeFi on the XRPL"
+      [showText]="true"
+      [animate]="true"
+    ></app-spinner>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!loading">
+  <mat-toolbar fxLayout="row" class="back">
+    <button mat-button routerLink="">
+      <mat-icon>home</mat-icon>
+    </button>
+    <span class="toolbar-spacer"></span>
+    <div fxHide.lt-sm>
+      <button
+        mat-button
+        *ngFor="let item of menuItems"
+        routerLink="{{ item.route }}"
+      >
+        <mat-icon>{{ item.icon }}</mat-icon>
+        {{ item.label }}
+      </button>
+      <button
+        mat-button
+        matomoClickCategory="TestXuite"
+        matomoClickAction="Open"
+        (click)="openXuite()"
+      >
+        <mat-icon>{{ testxuiteIcon }}</mat-icon>
+        {{ testxuiteLabel }}
+      </button>
+      <button
+        mat-button
+        matomoClickCategory="Tip"
+        matomoClickAction="Tips"
+        (click)="dialogService.openDonationDialog()"
+      >
+        <mat-icon>{{ donationIcon }}</mat-icon>
+        {{ donationLabel }}
+      </button>
+      <button
+        mat-icon-button
+        [matTooltip]="tooltipMode"
+        matomoClickCategory="Theme"
+        matomoClickAction="{{ theme.name }}"
+        (click)="toggleTheme()"
+      >
+        <mat-icon>{{ theme.icon }}</mat-icon>
+      </button>
+    </div>
+    <div fxHide fxShow.lt-sm>
+      <button mat-icon-button [matMenuTriggerFor]="dropMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #dropMenu="matMenu">
+        <ng-container *ngFor="let item of menuItems">
+          <button mat-menu-item routerLink="{{ item.route }}">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            {{ item.label }}
+          </button>
+          <mat-divider></mat-divider>
+        </ng-container>
+        <button
+          mat-menu-item
+          matomoClickCategory="TestXuite"
+          matomoClickAction="Open"
+          (click)="openXuite()"
+        >
+          <mat-icon>{{ testxuiteIcon }}</mat-icon>
+          {{ testxuiteLabel }}
+        </button>
+        <mat-divider></mat-divider>
+        <button
+          mat-menu-item
+          matomoClickCategory="Donation"
+          matomoClickAction="Open"
+          (click)="dialogService.openDonationDialog()"
+        >
+          <mat-icon>{{ donationIcon }}</mat-icon>
+          {{ donationLabel }}
+        </button>
+        <mat-divider></mat-divider>
+        <button
+          mat-menu-item
+          [matTooltip]="tooltipMode"
+          matomoClickCategory="Theme"
+          matomoClickAction="{{ theme.name }}"
+          (click)="toggleTheme()"
+        >
+          <mat-icon>{{ theme.icon }}</mat-icon>
+        </button>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+  <router-outlet></router-outlet>
+</ng-container>
+
+<div
+  *ngIf="showBackToTop"
+  fxLayout="row"
+  fxLayoutAlign="center center"
+  class="back-to-top"
+  (click)="scrollToTop()"
+>
+  <mat-icon>{{ backToTopIcon }}</mat-icon>
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,139 @@
+<app-header-small
+  title="ElitX Liquidity"
+  desc="Provide Liquidity and Earn Interest"
+></app-header-small>
+
+<!-- <h1>Choose a Pool</h1> -->
+
+<mat-card class="wrapper" appElevation>
+  <h1>Top-Pools</h1>
+
+  <div class="cent">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="assets = p; getPool()"
+      ch
+      *ngFor="let p of pools; let i = index"
+    >
+      {{ p[0]!.currency }}/{{ p[1]!.currency }}
+    </button>
+  </div>
+
+  <p>&nbsp;</p>
+
+  <h4>Assemble a custom pool</h4>
+
+  <div class="cent">
+    <mat-form-field appearance="fill" subscriptSizing="dynamic">
+      <mat-label>First Asset:</mat-label>
+      <mat-select
+        [(value)]="assets[0]"
+        [compareWith]="compareObjects"
+        (valueChange)="getPool()"
+      >
+        <mat-option [value]="p" *ngFor="let p of tokens">
+          {{ p!.currency }}
+        </mat-option>
+      </mat-select>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+    <!-- <button
+      mat-icon-button
+      (click)="getPool()"
+      matTooltip="Fetch pool details"
+      color="primary"
+      [disabled]="!assets[0] || !assets[1] || assets[0] == assets[1]"
+    >
+      <mat-icon>check_circle</mat-icon>
+    </button> -->
+    <mat-form-field appearance="fill" subscriptSizing="dynamic">
+      <mat-label>Second Asset:</mat-label>
+      <mat-select
+        [(value)]="assets[1]"
+        [compareWith]="compareObjects"
+        (valueChange)="getPool()"
+      >
+        <mat-option [value]="p" *ngFor="let p of tokens">
+          {{ p!.currency }}
+        </mat-option>
+      </mat-select>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+  </div>
+
+  <p>&nbsp;</p>
+
+  <h2>{{ assets[0]!.currency }}/{{ assets[1]!.currency }}</h2>
+
+  <p>&nbsp;</p>
+
+  <h4>Time to bring your money to work</h4>
+
+  <div class="cent">
+    <button mat-raised-button color="primary" (click)="getPool()">
+      Refresh Pool Info
+    </button>
+    <button
+      *ngFor="let b of buttonNames; index as i"
+      mat-raised-button
+      color="primary"
+      (click)="showApp = i + 1"
+      [disabled]="!pool"
+    >
+      {{ b }}
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="swap()"
+      [disabled]="!pool"
+    >
+      Swap Pair
+    </button>
+  </div>
+
+  <app-spinner
+    *ngIf="showApp == 0"
+    text="Loading pools..."
+    [showText]="true"
+  ></app-spinner>
+
+  <app-amm-deposit
+    *ngIf="showApp == 1"
+    [pool]="pool"
+    [poolData]="poolData"
+  ></app-amm-deposit>
+
+  <app-amm-withdraw
+    *ngIf="showApp == 2"
+    [pool]="pool"
+    [poolData]="poolData"
+  ></app-amm-withdraw>
+
+  <app-amm-swap
+    *ngIf="showApp == 3"
+    [pool]="pool"
+    [poolData]="poolData"
+  ></app-amm-swap>
+
+  <app-amm-vote
+    *ngIf="showApp == 4"
+    [pool]="pool"
+    [poolData]="poolData"
+  ></app-amm-vote>
+
+  <app-amm-auction
+    *ngIf="showApp == 5"
+    [pool]="pool"
+    [poolData]="poolData"
+  ></app-amm-auction>
+
+  <app-amm-create
+    *ngIf="showApp == 6"
+    [asset]="assets[0]!"
+    [asset2]="assets[1]!"
+  ></app-amm-create>
+
+  <!-- <pre>{{ pool | json }} </pre> -->
+</mat-card>

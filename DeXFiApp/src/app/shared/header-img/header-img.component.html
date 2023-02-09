@@ -1,0 +1,29 @@
+<div class="header-image-wrapper">
+  <div class="bg"></div>
+  <div class="header-image-content" fxHide.lt-sm>
+    <h1
+      *ngIf="title"
+      class="title"
+      Animation
+      textAnimation="text_focus_in_expand"
+    >
+      {{ title }}
+    </h1>
+    <p *ngIf="desc1" class="desc">{{ desc1 }}</p>
+    <div ngClass.gt-xs="mt-4" ngClass.xs="mt-3">
+      <a mat-stroked-button routerLink="/loan">P2P Loans</a>
+      <a mat-stroked-button routerLink="/launchpad">Launchpad</a>
+    </div>
+  </div>
+  <div class="header-image-content-small" fxHide fxShow.lt-sm>
+    <h1
+      *ngIf="title"
+      class="title-small"
+      Animation
+      textAnimation="text_focus_in_expand"
+    >
+      {{ title }}
+    </h1>
+    <p *ngIf="desc1" class="desc-small">{{ desc1 }}</p>
+  </div>
+</div>

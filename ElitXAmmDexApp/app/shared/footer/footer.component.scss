@@ -1,0 +1,15 @@
+.wrapper {
+  padding: 20px 40px 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.twitter {
+  margin: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.twitter:hover {
+  transform: scale(1.1);
+}

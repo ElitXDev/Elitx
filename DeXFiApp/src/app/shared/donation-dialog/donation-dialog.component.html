@@ -1,0 +1,48 @@
+<div class="wrapper" fxLayout="column" fxLayoutAlign="center center">
+  <h3 mat-dialog-title>{{ donationSubtitle }}</h3>
+  <h1 mat-dialog-title>
+    {{ donationTitle }}
+  </h1>
+  <mat-dialog-content>
+    <button
+      mat-raised-button
+      color="primary"
+      matomoClickCategory="Donation"
+      matomoClickAction="Copy address"
+      [matTooltip]="addressQrTooltip"
+      matTooltipPosition="after"
+      [matTooltipShowDelay]="tooltipShowDelay"
+      [matTooltipHideDelay]="tooltipHideDelay"
+      [cdkCopyToClipboard]="donationAddress"
+      (click)="
+        snackBarService.openSnackBar(
+          addressSnackbarMessage,
+          addressSnackbarAction,
+          addressSnackbarDuration
+        )
+      "
+    >
+      {{ donationAddress }}
+    </button>
+    <p></p>
+    <qr-code
+      [level]="qrLevel"
+      [size]="qrSize"
+      [value]="donationAddress"
+    ></qr-code>
+    <p></p>
+    <h3>{{ donationThanks }}</h3>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      color="accent"
+      mat-dialog-close
+      (click)="close()"
+      matomoClickCategory="Donation"
+      matomoClickAction="Close"
+    >
+      Close
+    </button>
+  </mat-dialog-actions>
+</div>

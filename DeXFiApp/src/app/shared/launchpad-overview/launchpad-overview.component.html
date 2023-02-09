@@ -1,0 +1,254 @@
+<div class="wrapper">
+  <ng-template *ngTemplateOutlet="filterTmp"></ng-template>
+
+  <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
+    <ng-container matColumnDef="{{ cols[0] }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.name }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="{{ cols[1] }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.business }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="{{ cols[2] }}">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Website</th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.website }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="cols.length">
+        <div
+          *ngIf="element === expandedElement"
+          class="element-detail"
+          Animation
+          [eleAnimation]="eleAnimation"
+        >
+          <div>
+            <h2><u>Project overview:</u></h2>
+            <p><u>Name:</u> {{ element.name }}</p>
+            <p><u>Business:</u> {{ element.business }}</p>
+            <p>
+              <u>Website:</u>&nbsp;
+              <a href="{{ element.website }}" target="_blank">
+                {{ element.website }}
+              </a>
+            </p>
+            <p><u>Team:</u></p>
+            <div
+              fxLayoutAlign="space-around"
+              fxLayoutGap="10px"
+              fxLayout="row wrap"
+            >
+              <div
+                fxLayout="column"
+                fxLayoutAlign="top center"
+                class="cont"
+                *ngFor="let member of element.team"
+              >
+                <p>{{ member.name }}, {{ member.role }}</p>
+                <p>
+                  LinkedIn:
+                  <a href="{{ member.linkedIn }}" target="_blank">{{
+                    member.name
+                  }}</a>
+                </p>
+                <p>{{ member.about }}</p>
+              </div>
+            </div>
+            <p><u>Our Vision:</u> {{ element.vision }}</p>
+            <p><u>More about us:</u> {{ element.more }}</p>
+            <p><u>Our offer:</u></p>
+            <p *ngFor="let category of element.percent; let i = index">
+              <u>Category {{ i + 1 }}:</u> {{ element.percent[i] }}% for
+              {{ element.price[i] }} XRP - Available:
+              {{ element.shares[i] }} out of a total of
+              {{ element.maxShares[i] }}
+            </p>
+            <p><u>Closes:</u> {{ element.closeTime | date: "long" }}</p>
+          </div>
+          <mat-divider inset="true"></mat-divider>
+          <p>&nbsp;</p>
+          <p>
+            Choose a category and send the right amount to the smart contract.
+            You will immediately receive a free NFT offer. Only one purchase per
+            address is allowed.
+          </p>
+          <div
+            fxLayoutAlign="space-around"
+            fxLayoutGap="10px"
+            fxLayout="row wrap"
+          >
+            <div fxLayout="column" fxLayoutAlign="top center" class="cont">
+              <p><u>Smart Contract address:</u></p>
+              <button
+                mat-raised-button
+                matTooltip="Copy to the clipboard"
+                matTooltipPosition="after"
+                color="accent"
+                matomoClickCategory="Launchpad"
+                matomoClickAction="copy projectAddress"
+                [cdkCopyToClipboard]="getXAddress(element.address, 1)"
+                (click)="
+                  snackBarService.openSnackBar(
+                    addressSnackbarMessage,
+                    addressSnackbarAction,
+                    addressSnackbarDuration
+                  )
+                "
+              >
+                {{
+                  getXAddress(element.address, element.closeTime >= now ? 2 : 4)
+                }}
+              </button>
+              <qr-code
+                level="Q"
+                [size]="150"
+                [value]="
+                  getXAddress(element.address, element.closeTime >= now ? 2 : 4)
+                "
+              ></qr-code>
+            </div>
+            <div fxLayout="column" fxLayoutAlign="top center" class="cont">
+              <p><u>One-click send:</u></p>
+              <mat-form-field appearance="fill">
+                <mat-label>Sender account:</mat-label>
+                <mat-select [(ngModel)]="acc">
+                  <mat-option
+                    *ngFor="let account of accs"
+                    [value]="account.id"
+                    >{{ account.name }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Size:</mat-label>
+                <mat-select [(ngModel)]="category">
+                  <mat-option
+                    *ngFor="let percent of element.percent; let i = index"
+                    [value]="i"
+                    >{{ percent }}% ({{ element.price[i] }} XRP)
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div *ngIf="element.closeTime >= now">
+                <button
+                  mat-raised-button
+                  color="accent"
+                  matomoClickCategory="Launchpad"
+                  matomoClickAction="invest"
+                  (click)="sendTx(element, 2)"
+                  [disabled]="loading || !element.shares[category]"
+                >
+                  Invest
+                </button>
+                <button
+                  mat-raised-button
+                  color="accent"
+                  matomoClickCategory="Launchpad"
+                  matomoClickAction="acceptNftOffer"
+                  (click)="
+                    acceptOffer(accs[acc]!.nftSellOffers![0].nft_offer_index)
+                  "
+                  [disabled]="loading || !accs[acc]!.nftSellOffers"
+                >
+                  Get NFT
+                </button>
+              </div>
+              <div *ngIf="element.closeTime < now">
+                <button
+                  mat-raised-button
+                  color="accent"
+                  matomoClickCategory="Launchpad"
+                  matomoClickAction="getRefund"
+                  (click)="sendTx(element, 4)"
+                  [disabled]="loading || !element.shares[category]"
+                >
+                  Get Refund
+                </button>
+              </div>
+              <mat-progress-bar
+                [mode]="loading ? 'indeterminate' : 'determinate'"
+              ></mat-progress-bar>
+            </div>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="cols"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: cols"
+      class="element-row"
+      [class.example-expanded-row]="expandedElement === row"
+      (click)="expand(row)"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['expandedDetail']"
+      class="detail-row"
+    ></tr>
+
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">
+        {{
+          filterValue
+            ? "No data matching the filter " + filterValue
+            : "Looks empty here... Why not create a loan yourself?"
+        }}
+      </td>
+    </tr>
+  </table>
+  <mat-paginator
+    [pageSizeOptions]="[10, 25, 100]"
+    aria-label="Select page of loans"
+  ></mat-paginator>
+</div>
+
+<ng-template #filterTmp>
+  <button
+    mat-raised-button
+    color="primary"
+    matomoClickCategory="Launchpad"
+    matomoClickAction="register"
+    matTooltip="Register your project"
+    matTooltipPosition="after"
+    (click)="register()"
+  >
+    Register your project
+  </button>
+  <mat-form-field class="left-align" appearance="standard">
+    <mat-label>Filter</mat-label>
+    <input
+      matInput
+      #input
+      [(ngModel)]="filterValue"
+      (keyup)="applyFilter($event)"
+      placeholder="Ex- memes"
+    />
+  </mat-form-field>
+</ng-template>
+
+<!-- <mat-form-field appearance="fill">
+  <input matInput [(ngModel)]="key" />
+  <mat-label>Resend Key</mat-label>
+</mat-form-field>
+<button
+  color="accent"
+  matomoClickCategory="TakeLoan"
+  matomoClickAction="resend offer"
+  aria-label="Resend Offers"
+  matTooltip="Resend Offers"
+  (click)="resend()"
+>
+  Resend
+</button> -->

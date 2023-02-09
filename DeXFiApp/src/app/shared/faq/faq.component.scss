@@ -1,0 +1,34 @@
+h1 {
+  text-align: center;
+  margin-top: 70px;
+}
+
+mat-expansion-panel {
+  margin-left: 15px;
+  margin-right: 15px;
+  mat-expansion-panel-header {
+    height: auto !important;
+  }
+}
+
+mat-expansion-panel:not(.mat-expanded) {
+  margin-bottom: 1px;
+}
+
+mat-expansion-panel:not(.mat-expanded):hover {
+  background: rgb(211, 211, 211, 0.5);
+  cursor: pointer;
+}
+
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description {
+  flex-basis: 0;
+  margin: 15px 0 15px 0;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mat-radio-button {
+  padding-left: 10px;
+  padding-bottom: 20px;
+}

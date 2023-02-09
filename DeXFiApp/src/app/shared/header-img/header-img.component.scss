@@ -1,0 +1,60 @@
+.header-image-wrapper {
+  position: relative;
+  margin-top: -50px;
+  padding-top: 50px;
+  background-image: linear-gradient(-45deg, #13051f, #233671);
+  .header-image-content {
+    position: relative;
+    color: #fff;
+    padding: 200px 0px 100px 10%;
+    .title {
+      font-size: 4rem;
+      font-weight: bold;
+      line-height: 100%;
+    }
+    .desc {
+      margin: 0;
+      font-size: 1.5rem;
+      font-style: italic;
+      padding-top: 10px;
+      line-height: 130%;
+      max-width: 640px;
+    }
+    .mat-stroked-button {
+      font-size: 1.5rem;
+      min-width: 170px;
+      margin: 150px 10px 10px 0;
+      padding: 10px;
+    }
+  }
+  .header-image-content-small {
+    position: relative;
+    color: #fff;
+    padding: 100px 0px 80px 5%;
+    .title-small {
+      font-size: 2.5rem;
+      font-weight: bold;
+      line-height: 100%;
+    }
+    .desc-small {
+      margin: 0;
+      font-size: 1.2rem;
+      font-style: italic;
+      padding-top: 10px;
+      line-height: 130%;
+      max-width: 640px;
+    }
+  }
+  .bg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url("../../../assets/images/background/header_right_bg.png");
+    background-attachment: fixed;
+  }
+}

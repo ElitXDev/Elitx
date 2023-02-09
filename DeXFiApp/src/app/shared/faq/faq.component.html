@@ -1,0 +1,40 @@
+<h1>Frequently Asked Questions</h1>
+<div fxLayout="column" fxLayoutAlign="center center">
+  <mat-radio-group [value]="0">
+    <mat-radio-button
+      *ngFor="let name of names; let i = index"
+      [value]="i"
+      (change)="setFaq(i)"
+    >
+      {{ names[i] }}
+    </mat-radio-button>
+  </mat-radio-group>
+</div>
+<mat-accordion>
+  <ng-container *ngFor="let f of faq; let i = index">
+    <mat-expansion-panel [expanded]="step === i" (opened)="setStep(i)">
+      <mat-expansion-panel-header>
+        <mat-panel-title> {{ f.title }} </mat-panel-title>
+        <mat-panel-description>
+          {{ f.description }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <p [innerText]="f.answer"></p>
+
+      <mat-action-row>
+        <button *ngIf="step > 0" mat-button color="warn" (click)="prevStep()">
+          Previous
+        </button>
+        <button
+          *ngIf="step < faq.length - 1"
+          mat-button
+          color="primary"
+          (click)="nextStep()"
+        >
+          Next
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </ng-container>
+</mat-accordion>

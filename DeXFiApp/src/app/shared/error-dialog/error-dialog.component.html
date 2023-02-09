@@ -1,0 +1,17 @@
+<div class="wrapper" fxLayout="column" fxLayoutAlign="center center">
+  <h3 mat-dialog-title>Sorry, we could not fetch your Test-Accounts</h3>
+  <mat-dialog-actions>
+    <button
+      mat-raised-button
+      color="primary"
+      matomoClickCategory="Error"
+      matomoClickAction="Retry"
+      matTooltip="Try again"
+      matTooltipPosition="after"
+      routerLink="/"
+      (click)="retry()"
+    >
+      Retry
+    </button>
+  </mat-dialog-actions>
+</div>

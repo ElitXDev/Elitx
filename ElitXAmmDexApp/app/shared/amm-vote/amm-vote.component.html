@@ -1,0 +1,29 @@
+<mat-card appElevation>
+  <mat-card-content class="wrapper">
+    <h3>
+      Vote on the Trading Fee for {{ poolData.Asset }}/{{ poolData.Asset2 }}
+    </h3>
+    <p>&nbsp;</p>
+    <p>Current Fee: {{ poolData.TradingFee }}%</p>
+    <p>Valid: 0.001% - 1%.</p>
+    <p>&nbsp;</p>
+
+    <mat-form-field [formGroup]="form" appearance="fill">
+      <input matInput type="number" formControlName="Fee" />
+      <mat-label>Trading Fee</mat-label>
+      <span matTextSuffix>%</span>
+      <mat-error>Required</mat-error>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="parseTx()"
+      [disabled]="form.invalid"
+    >
+      Let's do this!
+    </button>
+
+    <!-- <pre>{{ tx | json }} </pre> -->
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,55 @@
+@use "@angular/material" as mat;
+/******* Base styles *******/
+* {
+  margin: 0;
+  padding: 0;
+}
+html {
+  height: 100%;
+  min-height: 100%;
+}
+body {
+  min-height: 100%;
+  font-family: "Roboto";
+  font-weight: 500;
+}
+.app {
+  min-height: 100vh;
+}
+mat-expansion-panel {
+  margin-left: 15px;
+  margin-right: 15px;
+  mat-expansion-panel-header {
+    height: auto !important;
+  }
+}
+
+mat-expansion-panel:not(.mat-expanded) {
+  margin-bottom: 1px;
+}
+
+mat-expansion-panel:not(.mat-expanded):hover {
+  background: rgb(211, 211, 211, 0.5);
+  cursor: pointer;
+}
+
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description {
+  flex-basis: 0;
+  margin: 15px 0 15px 0;
+  justify-content: space-between;
+  align-items: center;
+}
+
+mat-radio-button {
+  padding-right: 10px;
+}
+mat-radio-group {
+  padding: 10px;
+}
+mat-card {
+  margin: 10px;
+}
+mat-form-field {
+  margin-right: 10px;
+}

@@ -1,0 +1,24 @@
+.wrapper {
+  display: block;
+  overflow: auto;
+  margin: 20px;
+}
+
+h1,
+label {
+  text-align: center;
+  vertical-align: middle;
+  font-size: x-large;
+  margin: 50px 0 10px 0;
+}
+
+.mat-radio-button {
+  font-size: x-large;
+  line-height: 130%;
+  margin-right: 20px;
+  max-width: 98%;
+}
+
+.fetch {
+  height: 50vh;
+}

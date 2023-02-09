@@ -1,0 +1,37 @@
+.navbar {
+  justify-content: space-between;
+}
+
+.back {
+  height: 50px;
+  position: relative;
+  z-index: 10 !important;
+  background: rgba(255, 255, 255, 0) !important;
+  color: white !important;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.back-to-top {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 100;
+  right: 20px;
+  bottom: 20px;
+  opacity: 0.5;
+  color: #fff;
+  background-color: rgba(153, 153, 153, 0.75);
+  border-radius: 50%;
+  transition: 0.3s;
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.spinner {
+  min-height: 100vh;
+}
